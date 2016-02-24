@@ -12,9 +12,10 @@ var exports = {
 function call(options) {
 	var deferred = q.defer();
 	options = option || {headers: {}};
+	options.url = exports.url;
 	options.headers['X-Pact-Mock-Service'] = 'true';
 	options.headers['Content-Type'] = 'application/json';
-	http(exports.url, options, function (error, response, body) {
+	http(options, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			deferred.resolve(body);
 		} else {
