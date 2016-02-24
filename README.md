@@ -21,3 +21,13 @@ To develop this project, simply install the dependencies and run `npm watch` to 
 ## Testing
 
 Running `npm test` will execute the tests that has the `*.spec.js` pattern.
+
+
+dsl.given('an http query')
+	.uponReceiving('a search GET request with a query')
+	.withRequest({method: 'get', path: '/_search', query: term('q=.*', 'q=test'), headers: requestHeaders})
+	.willRespondWith({
+		status: 200,
+		headers: responseHeaders,
+		body: mockWithResults
+	});
