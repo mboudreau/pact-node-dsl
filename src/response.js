@@ -1,5 +1,9 @@
 'use strict';
 
-module.exports = function (name) {
+var service = require('./pact-service.js');
 
+module.exports = function (definition) {
+	return function(interaction) {
+		return service.interaction(definition);
+	};
 };

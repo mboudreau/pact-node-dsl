@@ -6,12 +6,14 @@ var http = require('request'),
 
 var exports = {
 	url: 'http://127.0.0.1:9700',
-	clear: clear
+	clear: clear,
+	interaction: interaction
 };
 
 function call(options) {
 	var deferred = q.defer();
-	options = option || {headers: {}};
+	options = options || {};
+	options.headers = options.headers || {};
 	options.url = exports.url;
 	options.headers['X-Pact-Mock-Service'] = 'true';
 	options.headers['Content-Type'] = 'application/json';
@@ -26,6 +28,10 @@ function call(options) {
 }
 
 function clear() {
+	return call({});
+}
+
+function interaction(definition){
 	return call({});
 }
 

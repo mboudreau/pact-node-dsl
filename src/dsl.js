@@ -7,7 +7,7 @@ var given = require('./given.js'),
 module.exports = function (url) {
 	service.url = url;
 	return {
-		given: given,
+		given: given({} /** TODO add base definition here **/),
 		clear: service.clear
 	};
 };
