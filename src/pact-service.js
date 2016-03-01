@@ -1,20 +1,23 @@
 'use strict';
 
 var http = require('request'),
-	q = require('q');
+	q = require('q'),
+	url = require('url'),
+	serverUrl = 'http://127.0.0.1:9700';
 
 
-var exports = {
-	url: 'http://127.0.0.1:9700',
-	clear: clear,
-	interaction: interaction
-};
+function baseUrl(url) {
+	if (url) {
+		serverUrl = url;
+	}
+	return serverUrl;
+}
 
 function call(options) {
 	var deferred = q.defer();
 	options = options || {};
 	options.headers = options.headers || {};
-	options.url = exports.url;
+	options.url = url.resolve(baseUrl(), options.url);
 	options.headers['X-Pact-Mock-Service'] = 'true';
 	options.headers['Content-Type'] = 'application/json';
 	http(options, function (error, response, body) {
@@ -28,11 +31,29 @@ function call(options) {
 }
 
 function clear() {
-	return call({});
+	return call({method: 'DELETE', url: '/interactions'});
 }
 
-function interaction(definition){
-	return call({});
+function setInterations(interactions) {
+	if (typeof interactions == "Object") {
+		interactions = [interactions];
+	}
+
+	return call({method: 'POST', url: '/interactions', body: JSON.stringify(interactions)});
 }
 
-module.exports = exports;
+function verifyInteractions() {
+	return call({method: 'GET', url: '/interactions/verification'});
+}
+
+function createPactFile(options) {
+	return call({method: 'POST', url: '/pact', body: JSON.stringify(options)});
+}
+
+module.exports = {
+	baseUrl: baseUrl,
+	clear: clear,
+	set: setInterations,
+	verify: verifyInteractions,
+	create: createPactFile
+};

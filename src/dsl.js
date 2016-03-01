@@ -5,10 +5,12 @@ var given = require('./given.js'),
 
 
 module.exports = function (url) {
-	service.url = url;
+	service.baseUrl(url);
 	return {
 		given: given({} /** TODO add base definition here **/),
-		clear: service.clear
+		clear: service.clear,
+		verify: service.verify,
+		create: service.createPact
 	};
 };
 
