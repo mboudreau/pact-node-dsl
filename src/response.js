@@ -3,7 +3,8 @@
 var service = require('./pact-service.js');
 
 module.exports = function (definition) {
-	return function(interaction) {
-		return service.set(interaction);
+	return function(options) {
+		definition.response = options;
+		return service.set(definition);
 	};
 };

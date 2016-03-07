@@ -5,8 +5,7 @@ var expect = require('chai').expect,
 	pact = require('./dsl.js');
 
 describe("Pact DSL Spec", function () {
-	var requestHeaders = {
-	};
+	var requestHeaders = {};
 	var responseHeaders = {
 		'Content-Type': 'application/json;charset=utf-8'
 	};
@@ -15,19 +14,19 @@ describe("Pact DSL Spec", function () {
 	};
 
 	var mock = {
-		"works":true
+		"works": true
 	};
 
 	var dsl;
-	before(function(){
+	before(function () {
 		dsl = pact();
 	});
 
-	after(function(){
+	after(function () {
 
 	});
 
-	it('Should pass', function(){
+	it('Should pass', function () {
 		var promise = dsl.given('an http query')
 			.uponReceiving('a search GET request with a query')
 			.withRequest({method: 'get', path: '/_search', query: term('q=.*', 'q=test'), headers: requestHeaders})
@@ -35,10 +34,10 @@ describe("Pact DSL Spec", function () {
 				status: 200,
 				headers: responseHeaders,
 				body: mock
+			}).then(function () {
+				expect(promise).to.be.ok;
 			});
-
-		expect(promise).to.be.ok;
-	})
+	});
 });
 
 

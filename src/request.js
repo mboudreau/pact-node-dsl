@@ -2,8 +2,14 @@
 
 var response = require('./response.js');
 
-module.exports = function(definition){
+module.exports = function (definition) {
 	return function (options) {
+		definition.request = options;
+
+		if (!definition.request.method || !definition.request.path) {
+			throw 'pact-consumer-js-dsl\'s "withRequest" function requires "method" and "path" parameters';
+		}
+
 		return {willRespondWith: response(definition)};
 	}
 };

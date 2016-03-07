@@ -1,17 +1,15 @@
 'use strict';
 
 var given = require('./given.js'),
-	service = require('./pact-service.js');
-
+	service = require('./pact-service.js'),
+	q = require('q');
 
 module.exports = function (url) {
 	service.baseUrl(url);
 	return {
-		given: given({} /** TODO add base definition here **/),
+		given: given(),
 		clear: service.clear,
 		verify: service.verify,
-		create: service.createPact
+		create: service.create
 	};
 };
-
-
