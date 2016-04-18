@@ -2,9 +2,10 @@
 
 var service = require('./pact-service.js');
 
-module.exports = function (definition) {
+module.exports = function (dsl, definition) {
 	return function(options) {
 		definition.response = options;
-		return service.set(definition);
+		service.add(definition);
+		return dsl;
 	};
 };

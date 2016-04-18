@@ -1,4 +1,4 @@
-<img src="https://github.com/pact-foundation/pact-logo/blob/master/media/logo-black.png" width="200">
+<img src="https://raw.githubusercontent.com/pact-foundation/pact-logo/master/media/logo-black.png" width="200">
 
 # Pact DSL
 

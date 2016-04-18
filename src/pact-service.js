@@ -3,7 +3,8 @@
 var http = require('request'),
 	q = require('q'),
 	url = require('url'),
-	serverUrl = 'http://127.0.0.1:9700';
+	serverUrl = 'http://127.0.0.1:9700',
+	interactions = [];
 
 
 function baseUrl(url) {
@@ -30,16 +31,21 @@ function call(options) {
 	return deferred.promise.timeout(10000, 'Cannot communicate with pact service');
 }
 
-function clear() {
-	return call({method: 'DELETE', url: '/interactions'});
+function clearInteractions() {
+	return call({method: 'DELETE', url: '/interactions'}).then(function () {
+		interactions = [];
+	});
 }
 
-function setInterations(interactions) {
-	if (typeof interactions == "Object") {
-		interactions = [interactions];
-	}
-
+function setup() {
 	return call({method: 'POST', url: '/interactions', body: JSON.stringify(interactions)});
+}
+
+function addInterations(i) {
+	if (typeof i == 'Object' && typeof i !== 'Array') {
+		i = [i];
+	}
+	interactions.push.apply(interactions, i);
 }
 
 function verifyInteractions() {
@@ -52,8 +58,9 @@ function createPactFile(options) {
 
 module.exports = {
 	baseUrl: baseUrl,
-	clear: clear,
-	set: setInterations,
+	setup: setup,
+	clear: clearInteractions,
+	add: addInterations,
 	verify: verifyInteractions,
 	create: createPactFile
 };

@@ -2,7 +2,8 @@
 'use strict';
 
 var expect = require('chai').expect,
-	pact = require('./dsl.js');
+	DSL = require('./dsl.js'),
+	pact = require('@pact-foundation/pact-node');
 
 describe("Pact DSL Spec", function () {
 	var requestHeaders = {};
@@ -17,26 +18,39 @@ describe("Pact DSL Spec", function () {
 		"works": true
 	};
 
-	var dsl;
-	before(function () {
-		dsl = pact();
+	var dsl, server;
+	before(function (done) {
+		dsl = DSL();
+		pact.create({
+				port: 9700
+			})
+			.start()
+			.then(function (s) {
+				server = s;
+				done();
+			});
 	});
 
-	after(function () {
-
+	after(function (done) {
+		server.delete().then(function () {
+			done();
+			server = null;
+		});
 	});
 
 	it('Should pass', function () {
-		var promise = dsl.given('an http query')
+		var i = dsl.given('an http query')
 			.uponReceiving('a search GET request with a query')
 			.withRequest({method: 'get', path: '/_search', query: term('q=.*', 'q=test'), headers: requestHeaders})
 			.willRespondWith({
 				status: 200,
 				headers: responseHeaders,
 				body: mock
-			}).then(function () {
-				expect(promise).to.be.ok;
 			});
+		var promise = dsl.setup();
+
+		expect(promise).to.be.ok;
+		expect(i).to.be.equal(dsl);
 	});
 });
 

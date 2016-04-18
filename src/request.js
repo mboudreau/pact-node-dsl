@@ -2,7 +2,7 @@
 
 var response = require('./response.js');
 
-module.exports = function (definition) {
+module.exports = function (dsl, definition) {
 	return function (options) {
 		definition.request = options;
 
@@ -10,6 +10,6 @@ module.exports = function (definition) {
 			throw 'pact-consumer-js-dsl\'s "withRequest" function requires "method" and "path" parameters';
 		}
 
-		return {willRespondWith: response(definition)};
+		return {willRespondWith: response(dsl, definition)};
 	}
 };

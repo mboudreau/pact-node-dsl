@@ -2,10 +2,10 @@
 
 var upon = require('./upon.js');
 
-module.exports = function () {
+module.exports = function (dsl) {
 	var definition = {};
 	return function (name) {
 		definition.providerState =  name;
-		return {uponReceiving: upon(definition)};
+		return {uponReceiving: upon(dsl, definition)};
 	}
 };
